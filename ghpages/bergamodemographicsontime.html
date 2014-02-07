@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<h1>Demographics of Bergamo over time</h1>
+<style>
+h1 {
+	font-family: Corbel
+	}
+body {
+  font-family: Corbel;
+  margin: auto;
+  position: relative;
+  width: 960px;
+}
+
+text {
+  font: 16px Corbel;
+}
+
+form {
+  position: absolute;
+  right: 300px;
+  top: 130px;
+}
+
+</style>
+<form>
+  <label><input type="radio" name="dataset" value="all" checked> 2003</label>
+  <label><input type="radio" name="dataset" value="males"> 2008</label>
+  <label><input type="radio" name="dataset" value="females"> 2013</label>
+</form>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+
+var dataset = {
+  all: [23865, 34366, 29494, 25690],
+  males: [24847, 32936, 30449, 27549],
+  females: [25886, 28037, 32784, 28365]
+};
+
+var legend = [
+  "0-24",
+  "25-44",
+  "44-64",
+  "65+" 
+];
+
+var width = 1020,
+  height = 500,
+  //radius = Math.min(width, height) / 2;
+  radius=210;
+  
+var enterClockwise = {
+  startAngle: 0,
+  endAngle: 0
+};
+
+var enterAntiClockwise = {
+  startAngle: Math.PI * 2,
+  endAngle: Math.PI * 2
+};
+
+//var color = d3.scale.category20();
+var color = d3.scale.ordinal()
+    .range(["rgb(194, 255, 133)", "rgb(255, 255, 153)", "rgb(147, 204, 234)", "rgb(255, 193, 253)"]);
+
+var pie = d3.layout.pie()
+  .sort(null);
+
+var arc = d3.svg.arc()
+  .innerRadius(radius - 100)
+  .outerRadius(radius - 20);
+  
+
+var svg = d3.select("body").append("svg")
+  .attr("width", width)
+  .attr("height", height)
+  .append("g")
+  .attr("transform", "translate(" + (width-500) / 2 + "," + height / 2 + ")");
+  
+  var tooltip = d3.select("body")
+	.append("div")
+	.style("position", "absolute")
+	.style("border","1px solid")
+	.style("border-radius", "5px")
+	.style("border-color","gray")
+	.style("background-color","white")
+	.style("padding","12px")
+	//.style("z-index", "10")
+	.style("visibility", "hidden")
+	//.text(function(d,i){return dataset.all});
+  
+
+ //creo la legenda
+svg.append("rect")
+      .attr("x", "290")
+	  .attr("y","-100")
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill","rgb(194, 255, 133)");
+ 
+  svg.append("text")
+    .attr("x", "325")
+    .attr("y", "-85")
+    .text("0-24");
+	
+  svg.append("rect")
+      .attr("x", "290")
+	  .attr("y","-70")
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", "rgb(255, 255, 153)");
+ 
+  svg.append("text")
+    .attr("x", "325")
+    .attr("y", "-55")
+    .text("25-44");
+	
+  svg.append("rect")
+      .attr("x", "290")
+	  .attr("y","-40")
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", "rgb(147, 204, 234)");
+ 
+  svg.append("text")
+    .attr("x", "325")
+    .attr("y", "-25")
+    .text("45-64");
+	
+  svg.append("rect")
+      .attr("x", "290")
+	  .attr("y","-10")
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", "rgb(255, 193, 253)");
+ 
+  svg.append("text")
+    .attr("x", "325")
+    .attr("y", "5")
+    .text("65+");
+	
+ 
+// set the start and end angles to 0 so we can transition
+// clockwise to the actual values later
+var sum=d3.sum(dataset.all);
+var path = svg.selectAll("path")
+  .data(pie(dataset.all))
+  .enter().append("path") 
+    .attr("fill", function(d, i) { return color(i); })
+	.attr("fill-opacity", function(d) {return 1; }) 
+    .attr('class', function(d, i) { return 'arc-' + i + '-over'; })	
+.on('mouseover', function(d,i){
+        d3.selectAll('.arc-' + i + '-over')
+       .attr('fill-opacity', 0.5);
+    return tooltip.style("top", d3.event.pageY + "px")
+     .style("left", d3.event.pageX -((width-500) / 2) + "px")
+    .html(function() {
+	                    var percentage=percentage = (d.value/sum)*100;
+                         return "<strong style='color: gray'>"+legend[i]+"</strong> <br><center><span style='color: red'>" + percentage.toFixed(0) + "%"+ "</span></center>"
+                       })
+               .style("visibility", "visible");
+  })					   
+   .on('mouseout', function(){
+   d3.selectAll("path")
+    .attr('fill-opacity', 1);
+   return tooltip.style("visibility", "hidden");})
+    .attr("d", arc(enterClockwise))
+    .each(function(d) {
+      this._current = {
+        data: d.data,
+        value: d.value,
+        startAngle: enterClockwise.startAngle,
+        endAngle: enterClockwise.endAngle
+      }
+    }); // store the initial values
+	
+	/*path.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("dy", ".35em")
+      .style("text-anchor", "middle")
+	  .style("fill-opacity", function(d) {
+    if (d.value === 0) { return 1e-6; }
+    else { return 1; }
+  })
+      .text(function(d) { return d.data; });*/
+
+	// CENTER LABEL
+  svg.append("text")
+  .attr("dy", ".0em")
+  .attr("font-size", "100px")
+  .attr("fill", "grey")
+  .style("text-anchor", "middle")
+  //.text( "Total " + d3.sum(dataset.all));  
+  .text("Total ");
+  
+  var pieLabel = svg.append("text")
+  .attr("dy", "1.0em")
+  .attr("font-size", "100px")
+  .attr("fill", "red")
+  .style("text-anchor", "middle")  
+  .attr("fill","red").text(d3.sum(dataset.all));
+	
+path.transition()  // update
+    .duration(750)
+    .attrTween("d", arcTween);
+
+d3.selectAll("input").on("change", change);
+
+var timeout = setTimeout(function() {
+  d3.select("input[value=\"all\"]").property("checked", true).each(change);
+}, 500);
+
+
+
+function change() {
+  clearTimeout(timeout);
+  path = path.data(pie(dataset[this.value])); // update the data
+  // set the start and end angles to Math.PI * 2 so we can transition
+  // anticlockwise to the actual values later
+  sum=d3.sum(dataset[this.value]);
+  pieLabel.text(d3.sum(dataset[this.value]));
+  path.enter().append("path")
+      .attr("fill", function (d, i) {
+        return color(i);
+      })
+      .attr("d", arc(enterAntiClockwise))
+      .each(function (d) {
+        this._current = {
+          data: d.data,
+          value: d.value,
+          startAngle: enterAntiClockwise.startAngle,
+          endAngle: enterAntiClockwise.endAngle
+        };
+      }); // store the initial values
+
+  path.exit()
+      .transition()
+      .duration(750)
+      .attrTween('d', arcTweenOut)
+      .remove() // now remove the exiting arcs
+
+  path.transition().duration(750).attrTween("d", arcTween); // redraw the arcs
+}
+
+// Store the displayed angles in _current.
+// Then, interpolate from _current to the new angles.
+// During the transition, _current is updated in-place by d3.interpolate.
+function arcTween(a) {
+  var i = d3.interpolate(this._current, a);
+  this._current = i(0);
+  return function(t) {
+  return arc(i(t));
+  };
+}
+
+
+function arcTweenOut(a) {
+  var i = d3.interpolate(this._current, {startAngle: Math.PI * 2, endAngle: Math.PI * 2, value: 0});
+  return function (t) {
+    return arc(i(t));
+  };
+}
+
+
+</script>
