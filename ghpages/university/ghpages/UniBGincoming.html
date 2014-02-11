@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<h1>Foreigners in Bergamo over time</h1>
+<h1>UniBG incoming students (2012/2013)</h1>
 <style>
 h1 {
 	font-family: Corbel
@@ -18,43 +18,33 @@ text {
 
 form {
   position: absolute;
-  right: 300px;
+  right: 150px;
   top: 130px;
 }
 
 </style>
 <form>
-  <label><input type="radio" name="dataset" value="all" checked> 2004</label>
-  <label><input type="radio" name="dataset" value="males"> 2007</label>
-  <label><input type="radio" name="dataset" value="females">2011</label>
+  <label><input type="radio" name="dataset" value="all" checked> all</label>
+  <label><input type="radio" name="dataset" value="males"> 1 semester</label>
+  <label><input type="radio" name="dataset" value="females">2 semester</label>
 </form>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
 
 var dataset = {
-  all: [441, 815, 289, 111, 608, 523, 255, 231, 3765],
-  males: [836, 1427, 503, 160, 954, 780, 419, 585, 5349],
-  females: [989, 3917, 829, 335, 1178, 1830, 478, 1202, 7182]
+  all: [40,9,4,51,15,5],
+  males: [24,6,3,35,9,3],
+  females: [16,3,1,16,6,2]
 };
 
-var pop={
-  all: 116510,
-  males: 115781,
-  females: 115349
-  }
-
 var legend = [
-  "Albania",
-  "Bolivia",
-  "China",
-  "India",
-  "Marocco",
-  "Romania",
-  "Senegal",
-  "Ukraine",  
-  "Other"
+  "Economics",
+  "Law",
+  "Engineering",
+  "Foreign Languages",
+  "Human and Social Sciences",  
+  "Letters and Philosophy"  
 ];
-
 
 var width = 1020,
   height = 500,
@@ -72,7 +62,8 @@ var enterAntiClockwise = {
 };
 
 //var color = d3.scale.category20();
-var color = d3.scale.category20();
+var color = d3.scale.ordinal()
+    .range(["rgb(188, 19, 68)", "rgb(0, 28, 77)", "rgb(32, 183, 71)", "rgb(48, 139, 214)", "rgb(141, 162, 178)", "rgb(252, 236, 94)"]);
 
 var pie = d3.layout.pie()
   .sort(null);
@@ -107,115 +98,76 @@ svg.append("rect")
 	  .attr("y","-100")
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill",color(0));
+      .style("fill","rgb(188, 19, 68)");
  
   svg.append("text")
     .attr("x", "325")
     .attr("y", "-85")
-    .text("Albania");
+    .text("Management, Economics and Quantitative Methods");
 	
   svg.append("rect")
       .attr("x", "290")
 	  .attr("y","-70")
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", color(1));
+      .style("fill", "rgb(0, 28, 77)");
  
   svg.append("text")
     .attr("x", "325")
     .attr("y", "-55")
-    .text("Bolivia");
+    .text("Law");
 	
   svg.append("rect")
       .attr("x", "290")
 	  .attr("y","-40")
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", color(2));
+      .style("fill", "rgb(32, 183, 71)");
  
   svg.append("text")
     .attr("x", "325")
     .attr("y", "-25")
-    .text("China");
+    .text("Engineering");
 	
   svg.append("rect")
       .attr("x", "290")
 	  .attr("y","-10")
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", color(3));
+      .style("fill", "rgb(48, 139, 214)");
  
   svg.append("text")
     .attr("x", "325")
     .attr("y", "5")
-    .text("India");
+    .text("Foreign Languages, Literatures and Communication Studies");
 	
-    svg.append("rect")
+  svg.append("rect")
       .attr("x", "290")
 	  .attr("y","20")
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", color(4));
+      .style("fill",  "rgb(141, 162, 178)");
  
   svg.append("text")
     .attr("x", "325")
     .attr("y", "35")
-    .text("Marocco");	
-
-    svg.append("rect")
+    .text("Human and Social Sciences");	
+	
+  svg.append("rect")
       .attr("x", "290")
 	  .attr("y","50")
       .attr("width", 18)
       .attr("height", 18)
-      .style("fill", color(5));
+      .style("fill", "rgb(252, 236, 94)");
  
   svg.append("text")
     .attr("x", "325")
     .attr("y", "65")
-    .text("Romania");
+    .text("Letters and Philosophy");		
 	
-    svg.append("rect")
-      .attr("x", "290")
-	  .attr("y","80")
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color(6));
- 
-  svg.append("text")
-    .attr("x", "325")
-    .attr("y", "95")
-    .text("Senegal");	
-
-	svg.append("rect")
-      .attr("x", "290")
-	  .attr("y","110")
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color(7));
- 
-  svg.append("text")
-    .attr("x", "325")
-    .attr("y", "125")
-    .text("Ukraine");
-	
-	svg.append("rect")
-      .attr("x", "290")
-	  .attr("y","140")
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color(8));
- 
-  svg.append("text")
-    .attr("x", "325")
-    .attr("y", "155")
-    .text("Other");	
-	
-	
- 
 // set the start and end angles to 0 so we can transition
 // clockwise to the actual values later
 var sum=d3.sum(dataset.all);
-var popi=pop[0];
 var path = svg.selectAll("path")
   .data(pie(dataset.all))
   .enter().append("path") 
@@ -228,8 +180,8 @@ var path = svg.selectAll("path")
     return tooltip.style("top", d3.event.pageY + "px")
      .style("left", d3.event.pageX -((width-500) / 2) + "px")
     .html(function() {
-	                    var percentage = (d.value/sum)*100;
-                         return "<strong style='color: gray'>"+legend[i]+"</strong> <br><center><span style='color: red'>" + percentage.toFixed(1) + "%"+ "</span></center>"
+	                    var percentage=percentage = (d.value/sum)*100;
+                         return "<strong style='color: gray'>"+legend[i]+"</strong> <br><center><span style='color: red'>" + percentage.toFixed(0) + "%"+ "</span></center>"
                        })
                .style("visibility", "visible");
   })					   
@@ -259,8 +211,7 @@ var path = svg.selectAll("path")
 
 	// CENTER LABEL
   svg.append("text")
-  .attr("dy", "0.0em")
-  .attr("dx","-2.0em")
+  .attr("dy", ".0em")
   .attr("font-size", "100px")
   .attr("fill", "grey")
   .style("text-anchor", "middle")
@@ -268,30 +219,11 @@ var path = svg.selectAll("path")
   .text("Total ");
   
   var pieLabel = svg.append("text")
-  .attr("dx", "1.5em")
-  .attr("dy", "0.0em")
+  .attr("dy", "1.0em")
   .attr("font-size", "100px")
   .attr("fill", "red")
   .style("text-anchor", "middle")  
   .attr("fill","red").text(d3.sum(dataset.all));
-  
-   svg.append("text")
-  .attr("dy", "1.5em")
-  .attr("dx", "2.0em")
-  .attr("font-size", "100px")
-  .attr("fill", "grey")
-  .style("text-anchor", "middle")
-  //.text( "Total " + d3.sum(dataset.all));  
-  .text("of population");
-  
-  var percentagepopi=((d3.sum(dataset.all)/popi)*100);
-  var pieLabel2 = svg.append("text")
-  .attr("dy", "1.5em")
-  .attr("dx", "-3.0em")
-  .attr("font-size", "100px")
-  .attr("fill", "red")
-  .style("text-anchor", "middle")  
-  .attr("fill","red").text(percentagepopi.toFixed(1)+"%");
 	
 path.transition()  // update
     .duration(750)
@@ -303,19 +235,34 @@ var timeout = setTimeout(function() {
   d3.select("input[value=\"all\"]").property("checked", true).each(change);
 }, 500);
 
+/* var dept = ["Management, Economics and Quantitative Methods", "Law", "Engineering", "Foreign Languages, Literatures and Communication Studies", "Human and Social Sciences", "Letters and Philosophy"]; 
+  var legend = svg.selectAll(".legend")
+      .data(color.domain())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(dept,i) { return dept(i); });*/
 
 
 function change() {
-
   clearTimeout(timeout);
   path = path.data(pie(dataset[this.value])); // update the data
   // set the start and end angles to Math.PI * 2 so we can transition
   // anticlockwise to the actual values later
   sum=d3.sum(dataset[this.value]);
   pieLabel.text(d3.sum(dataset[this.value]));
-  percentagepopi=((d3.sum(dataset[this.value])/pop[this.value])*100);
-  pieLabel2.text(percentagepopi.toFixed(1)+"%");
- 
   path.enter().append("path")
       .attr("fill", function (d, i) {
         return color(i);
